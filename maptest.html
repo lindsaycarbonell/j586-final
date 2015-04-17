@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=">
+    </script>
+    <script type="text/javascript">
+      function initialize() {
+        var myLatlng = {lat: 35.9333, lng: -79.0333};
+        var myLatlng2 = {lat: 35.6, lng: -79.0333};
+        //var heartImg = 'images/heart.png';
+        var contentString = '<div id="infobox">Blah</div>';
+        var contentString2 = '<div id="infobox">Bleh</div>';
+        var infowindow = new google.maps.InfoWindow({
+              content: contentString
+          });
+        var infowindow2 = new google.maps.InfoWindow({
+              content: contentString2
+          });
+
+
+        var mapOptions = {
+          center: { lat: 35.9333, lng: -79.0333},
+          zoom: 15,
+          mapTypeId: google.maps.MapTypeId.TERRAINS
+        };
+        var map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+            title:"Chapel Hill",
+            //icon: heartImg
+        });
+        var marker2 = new google.maps.Marker({
+            position: myLatlng2,
+            map: map,
+            title:"Not Chapel Hill",
+            //icon: heartImg
+        });
+        google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map,marker);
+        });
+        google.maps.event.addListener(marker2, 'click', function() {
+            infowindow2.open(map,marker2);
+        });
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+  </head>
+  <body>
+<div id="map-canvas"></div>
+  </body>
+</html>
