@@ -1,15 +1,19 @@
-<meta charset="UTF-8">
-<link rel="stylesheet" href="css/styles.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="js/jquery.tweet-linkify.min.js"></script>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <base target="_blank">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="js/tweetLinkIt.js"></script>
 
-<script>
+  <script>
 
-    function pageComplete(){
-        $('.twit-tweet').tweetLinkify();
-    }
-</script>
-
+      function pageComplete(){
+          $('.twit-tweet').tweetLinkify();
+      }
+  </script>
+</head>
+<body>
 <?php
 $items;
 
@@ -43,7 +47,7 @@ $postfields = array(
 /** Perform a GET request and echo the response **/
 /** Note: Set the GET field BEFORE calling buildOauth(); **/
 $url = 'https://api.twitter.com/1.1/search/tweets.json'; /*search tweets: 1.1./search/tweets.json*/
-$getfield = '?q=%23writingtips'; /*how to do a #: ?q=%23hashtag*/
+$getfield = '?q=%23writing'; /*how to do a #: ?q=%23hashtag*/
 $requestMethod = 'GET';
 $twitter = new TwitterAPIExchange($settings);
 
@@ -58,14 +62,31 @@ $tweetData = json_decode($twitter->setGetfield($getfield)
 // echo $tweetData;
 
 foreach($tweetData['statuses'] as $items){
-  $userArray = $items['user'];
 
-  echo "<p class='twit-tweet'>" . $items['text'] . "</p><hr>";
+  $userArray = $items['user'];
+  $entitiesArray = $items['entities'];
+  $mediaArray = $entitiesArray['media'];
+  $tweetMedia = $mediaArray[0];
+
+  echo "<img class='twit-prof' src='" . $userArray['profile_image_url'] . "' />";
+
   echo  "<p class='screen-name'>@" . $userArray['screen_name'] . "</p>";
-  echo "<img class='twit-img' src='" . $userArray['profile_image_url'] . "' />";
+
+  echo "<div class='twit-tweet-div'><p class='twit-tweet'>" . $items['text'] . "</p></div>";
+
+  if($tweetMedia['media_url'] != null){echo "<a target='_blank' href='http://www.twitter.com/" . $tweetMedia['media_url'] . "'><img class='twit-img' src='" . $tweetMedia['media_url'] . "' ></a></br>";
+}
+  echo "<hr class='hr'>";
 }
 
 echo "<script>pageComplete()</script>"
 
 
 ?>
+
+
+
+
+
+</body>
+</html>
